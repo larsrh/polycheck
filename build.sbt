@@ -18,6 +18,7 @@ scalacOptions ++= Seq(
   "-Yno-adapted-args",
   "-Ywarn-numeric-widen",
   "-Ywarn-value-discard",
-  "-Xfuture",
-  "-Ywarn-unused-import"
+  "-Xfuture"
 )
+
+testOptions in Test += Tests.Argument("-minSuccessfulTests", "10000")
