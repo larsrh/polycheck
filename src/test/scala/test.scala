@@ -24,4 +24,13 @@ object Test extends Properties("Test") {
       }
     }
 
+  include(Shape[Numeric].exhaust[NumericClasses]("commutativity_all") { typ =>
+    typ.forAll { (t1, t2) =>
+      implicit val SG = typ.instance[AdditiveSemigroup]
+      implicit val EQ = typ.instance[Eq]
+
+      t1 + t2 === t2 + t1
+    }
+  })
+
 }
