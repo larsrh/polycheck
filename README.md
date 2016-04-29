@@ -1,0 +1,2 @@
+# polycheck
+Testing polymorphic properties
