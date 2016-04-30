@@ -9,8 +9,7 @@ import org.scalacheck._
 
 object Test extends Properties("Test") {
 
-  sealed trait Numeric
-  object Numeric extends Domain.DomainCompanion[Numeric, Int :: Float :: Double :: HNil]
+  sealed trait Numeric extends Domain.Aux[Int :: Float :: Double :: HNil]
 
   type NumericClasses = Arbitrary :&: Shrink :&: Eq :&: AdditiveSemigroup :&: TCNil
 

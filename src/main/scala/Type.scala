@@ -41,7 +41,7 @@ object TCList {
 
 }
 
-sealed abstract class Type[S, TCs <: TCList] {
+sealed abstract class Type[+S <: Domain, TCs <: TCList] {
   type T
   val instances: TCList.Pack[TCs, T]
   val name: String
@@ -75,13 +75,13 @@ sealed abstract class Type[S, TCs <: TCList] {
 
 object Type {
 
-  def make[T0, S, TCs <: TCList](name0: String)(implicit ev: TCList.Pack[TCs, T0]): Type[S, TCs] = new Type[S, TCs] {
+  def make[T0, S <: Domain, TCs <: TCList](name0: String)(implicit ev: TCList.Pack[TCs, T0]): Type[S, TCs] = new Type[S, TCs] {
     type T = T0
     val instances = ev
     val name = name0
   }
 
-  implicit def typeArbitrary[S, TCs <: TCList, Ts <: HList](implicit s: Domain.Aux[S, Ts], ev: Domain.Types[Ts, TCs]): Arbitrary[Type[S, TCs]] =
-    Arbitrary(Gen.oneOf(s.types(ev)))
+  implicit def typeArbitrary[S <: Domain, TCs <: TCList, Ts <: HList](implicit ev: Domain.Types[S#Instantiations, TCs]): Arbitrary[Type[S, TCs]] =
+    Arbitrary(Gen.oneOf(ev.types))
 
 }
