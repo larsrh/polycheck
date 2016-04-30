@@ -1,9 +1,10 @@
 scalaVersion := "2.11.8"
 
-libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.12.5"
+libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.13.0"
 libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.0"
-libraryDependencies += "org.spire-math" %% "spire" % "0.11.0"
 libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value
+
+libraryDependencies += "org.spire-math" %% "spire" % "0.11.0" % "test"
 
 scalacOptions ++= Seq(
   "-deprecation",
