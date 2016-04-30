@@ -6,34 +6,34 @@ import org.scalacheck._
 
 import shapeless._
 
-trait Shape[S] {
+trait Domain[S] {
   type Instantiations <: HList
 
-  def types[TCs <: TCList](implicit ev: Shape.Types[Instantiations, TCs]): List[Type[S, TCs]] = ev.types
+  def types[TCs <: TCList](implicit ev: Domain.Types[Instantiations, TCs]): List[Type[S, TCs]] = ev.types
 
-  def exhaust[TCs <: TCList](name: String)(f: Type[S, TCs] => Prop)(implicit ev: Shape.Types[Instantiations, TCs]): Properties =
+  def exhaust[TCs <: TCList](name: String)(f: Type[S, TCs] => Prop)(implicit ev: Domain.Types[Instantiations, TCs]): Properties =
     new Properties(name) {
       for (t <- types)
         property(s"[${t.name}]") = f(t)
     }
 
-  def exhaustAll[TCs <: TCList](name: String)(f: Type[S, TCs] => Properties)(implicit ev: Shape.Types[Instantiations, TCs]): Properties =
+  def exhaustAll[TCs <: TCList](name: String)(f: Type[S, TCs] => Properties)(implicit ev: Domain.Types[Instantiations, TCs]): Properties =
     new Properties(name) {
       for (t <- types)
         include(f(t), prefix =s"[${t.name}].")
     }
 }
 
-object Shape {
-  trait ShapeCompanion[S, Ts <: HList] {
-    implicit def sShape: Aux[S, Ts] = new Shape[S] {
+object Domain {
+  trait DomainCompanion[S, Ts <: HList] {
+    implicit def sDomain: Aux[S, Ts] = new Domain[S] {
       type Instantiations = Ts
     }
   }
 
-  type Aux[S, Ts <: HList] = Shape[S] { type Instantiations = Ts }
+  type Aux[S, Ts <: HList] = Domain[S] { type Instantiations = Ts }
 
-  def apply[S](implicit ev: Shape[S]): ev.type = ev
+  def apply[S](implicit ev: Domain[S]): ev.type = ev
 
   sealed trait Types[Ts <: HList, TCs <: TCList] {
     def types[S]: List[Type[S, TCs]]
@@ -50,12 +50,12 @@ object Shape {
   }
 }
 
-object shapes {
+object domains {
 
   sealed trait Small
-  object Small extends Shape.ShapeCompanion[Small, types.small.One :: types.small.Two :: HNil]
+  object Small extends Domain.DomainCompanion[Small, types.small.One :: types.small.Two :: HNil]
 
   sealed trait Default
-  object Default extends Shape.ShapeCompanion[Default, Int :: String :: Float :: HNil]
+  object Default extends Domain.DomainCompanion[Default, Int :: String :: Float :: HNil]
 
 }

@@ -81,7 +81,7 @@ object Type {
     val name = name0
   }
 
-  implicit def typeArbitrary[S, TCs <: TCList, Ts <: HList](implicit s: Shape.Aux[S, Ts], ev: Shape.Types[Ts, TCs]): Arbitrary[Type[S, TCs]] =
+  implicit def typeArbitrary[S, TCs <: TCList, Ts <: HList](implicit s: Domain.Aux[S, Ts], ev: Domain.Types[Ts, TCs]): Arbitrary[Type[S, TCs]] =
     Arbitrary(Gen.oneOf(s.types(ev)))
 
 }

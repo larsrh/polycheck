@@ -10,7 +10,7 @@ import org.scalacheck._
 object Test extends Properties("Test") {
 
   sealed trait Numeric
-  object Numeric extends Shape.ShapeCompanion[Numeric, Int :: Float :: Double :: HNil]
+  object Numeric extends Domain.DomainCompanion[Numeric, Int :: Float :: Double :: HNil]
 
   type NumericClasses = Arbitrary :&: Shrink :&: Eq :&: AdditiveSemigroup :&: TCNil
 
@@ -24,7 +24,7 @@ object Test extends Properties("Test") {
       }
     }
 
-  include(Shape[Numeric].exhaust[NumericClasses]("commutativity_all") { typ =>
+  include(Domain[Numeric].exhaust[NumericClasses]("commutativity_all") { typ =>
     typ.forAll { (t1, t2) =>
       implicit val SG = typ.instance[AdditiveSemigroup]
       implicit val EQ = typ.instance[Eq]
